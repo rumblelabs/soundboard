@@ -5,17 +5,27 @@ module Soundboard
       super(app)
     end
 
+    def play(path)
+     command = "cd #{settings.root} && "
+     command << "osascript volume_down.scpt && "
+     command << "afplay #{path} && "
+     command << "osascript volume_up.scpt"
+
+     `#{command}`
+    end
+
+
     get '/play' do
       file = params['file']
       path = "#{settings.root}/audio/#{file}.m4a"
+      directory = "#{settings.root}/audio/#{file}"
 
       if File.exists?(path)
-        command = "cd #{settings.root} && "
-        command << "osascript volume_down.scpt && "
-        command << "afplay #{path} && "
-        command << "osascript volume_up.scpt"
-
-        `#{command}`
+        play(path)
+      elsif File.exists?(directory)
+        files = Dir.glob("#{directory}/*.m4a")
+        file = files[rand(files.size)+1]
+        play(file)
       else
         halt 404
       end
