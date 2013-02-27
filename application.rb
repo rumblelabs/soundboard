@@ -1,11 +1,14 @@
 module Soundboard
   class Application < Sinatra::Base
 
+    set :logging, true
+
     def initialize(app)
       super(app)
     end
 
     def play(path)
+     STDERR.puts path
      command = "cd #{settings.root} && "
      command << "osascript volume_down.scpt && "
      command << "afplay #{path} && "
@@ -24,7 +27,7 @@ module Soundboard
         play(path)
       elsif File.exists?(directory)
         files = Dir.glob("#{directory}/*.m4a")
-        file = files[rand(files.size)+1]
+        file = files[rand(files.size)]
         play(file)
       else
         halt 404
