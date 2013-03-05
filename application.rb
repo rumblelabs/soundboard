@@ -11,7 +11,7 @@ module Soundboard
      STDERR.puts path
      command = "cd #{settings.root} && "
      command << "osascript volume_down.scpt && "
-     command << "afplay #{path} --volume 100 && "
+     command << "afplay #{path} --volume 5 && "
      command << "osascript volume_up.scpt"
 
      `#{command}`
